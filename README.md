@@ -1,80 +1,60 @@
-# ==============================================================================
-# 👷‍♂️ PHASE 1: THE REUSABLE JENKINS PIPELINE DECLARATION (CI/CD Manager)
-# ==============================================================================
-# File Reference: Jenkinsfile
-# Purpose: Orchestrates compilation, infrastructure provisioning, and orchestration.
-# ==============================================================================
-jenkins_orchestration_fabric:
-  pipeline_type: "Declarative Jenkins Core"
-  agent: "any"
-  stages:
-    - stage: "🗄️ Artifact Compilation (Tomcat Preparation)"
-      steps:
-        - run: "mvn clean package # Generates transaction-ledger.war"
-    - stage: "🏗️ Infrastructure Provisioning (Terraform)"
-      steps:
-        - run: "terraform init && terraform apply -auto-approve"
-    - stage: "🛠️ Operating System Hardening (Ansible)"
-      steps:
-        - run: "ansible-playbook -i inventory.ini system-tune.yml"
-    - stage: "🐳 Immutable Containerization (Docker)"
-      steps:
-        - run: "docker build -t sovereign-banking:v1 ."
-    - stage: "🧠 Multi-Node Orchestration (Kubernetes)"
-      steps:
-        - run: "kubectl apply -f cluster-deployment.yaml"
+# 🏦 Zero-Trust Sovereign Banking Portal & Automated Delivery Fabric
+
+A production-grade, multi-tool DevSecOps delivery engine designed to modernize legacy Java enterprise applications. This repository demonstrates the end-to-end orchestration of **Jenkins, Tomcat, Terraform, Ansible, Docker, and Kubernetes** within a zero-trust, automated deployment pipeline.
 
 ---
-# ==============================================================================
-# 🗄️ PHASE 2: IMMUTABLE DOCKER APPLICATION FACTORY (Tomcat Enclosure)
-# ==============================================================================
-# File Reference: Dockerfile
-# Purpose: Packages the compiled legacy Java corporate archive into Tomcat.
-# ==============================================================================
-container_blueprint:
-  base_factory_image: "tomcat:10-jdk17-openjdk-slim"
-  maintainer: "Adetunji Mathew Babatunde <adetunjimathewbabatunde@ymail.com>"
-  build_operations:
-    - remove_default_apps: "rm -rf /usr/local/tomcat/webapps/*"
-    - injection_path: "/usr/local/tomcat/webapps/ROOT.war"
-    - artifact_source: "target/transaction-ledger.war"
-    - runtime_port: 8080
-    - security_profile: "USER tomcat"
+
+## 🗺️ The Architecture Analogy (The Automated Armored Mint)
+To understand how these six tools hand off workloads seamlessly:
+1. **Jenkins (The Master Project Manager) 👷‍♂️:** Intercepts code commits, coordinates security scans, and governs the execution pipeline from start to finish.
+2. **Tomcat (The Secure Core Vault) 🗄️:** Acts as the legacy, high-security application runtime server compiling and processing heavy corporate financial transactions (`.war` archives).
+3. **Docker (The Security Armor) 📦:** Seals the Tomcat vault inside an immutable, tamper-evident container image that behaves identically across any environment.
+4. **Terraform (The Real Estate Developer) 🏗️:** Programmatically provisions cloud infrastructure landing zones and emits target host inventory maps (`inventory.ini`).
+5. **Ansible (The Utility Installer & Hardener) 🛠️:** Consumes the inventory map to execute idempotent playbooks, hardening the operating system and configuring runtime network parameters.
+6. **Kubernetes (The Sovereign Armed Garrison) 🧠:** Orchestrates 3 self-healing container replicas behind a high-availability NodePort gateway (`Port 32500`), equipped with active Liveness/Readiness health probes.
 
 ---
-# ==============================================================================
-# 🏗️ PHASE 3: DECLARATIVE INFRASTRUCTURE PROVISIONING (Terraform Developer)
-# ==============================================================================
-# File Reference: main.tf
-# Purpose: Programmatically maps out backend nodes and writes inventories.
-# ==============================================================================
-infrastructure_as_code:
-  provider: "hashicorp/local"
-  version: "~> 2.4.0"
-  resources:
-    local_file: "inventory.ini"
-    emitted_topology: |
-      [production_cluster]
-      k8s-master-node ansible_host=127.0.0.1 ansible_connection=local
-      k8s-worker-node ansible_host=127.0.0.1 ansible_connection=local
+
+## ⚙️ The Multi-Tool Integration Flowchart
+
+```text
+[ Developer Commit ] 
+       │
+       ▼
+ 👷‍♂️ [ JENKINS MASTER ] ───(Trigger Pipeline Run)───┐
+       │                                           │
+       ▼                                           ▼
+ 🗄️ [ TOMCAT BUILD STAGE ]                  🏗️ [ TERRAFORM STAGE ]
+ (Compiles Fin-App into .war)               (Provisions Cloud Nodes)
+       │                                           │
+       ▼                                           ▼
+ 🐳 [ DOCKER ENCAPSULATION ]                 🛠️ [ ANSIBLE HARDENING ]
+ (Seals Tomcat + WAR into Image)            (Configures Nodes & OS)
+       │                                           │
+       └───────────────────┬───────────────────────┘
+                           ▼
+                 🧠 [ KUBERNETES GARRISON ]
+                 (Launches 3 Self-Healing Pods)
+                           │
+                           ▼
+              [ Secure Port 32500 Window ]
+```
 
 ---
-# ==============================================================================
-# 🛠️ PHASE 4: IDEMPOTENT PROCESS TUNING RUNTIME (Ansible Decorator)
-# ==============================================================================
-# File Reference: system-tune.yml
-# Purpose: Audits system parameters and installs container drivers safely.
-# ==============================================================================
-- name: "🛠️ Infrastructure Hardening & Container Runtime Setup"
-  hosts: production_cluster
-  become: true
-  tasks:
-    - name: "📦 Step 4.1: Enforce Core Packages and Unzip Utilities"
-      ansible.builtin.apt:
-        name: [curl, unzip, containerd]
-        state: present
-    - name: "🔒 Step 4.2: Enforce Strict Linux Kernel Parameter Constraints"
-      ansible.builtin.sysctl:
-        name: net.ipv4.ip_forward
-        value: '1'
-        state: present
+
+## 🛠️ Pipeline Automation Stages Implemented
+
+### 👷‍♂️ Stage 1: Continuous Integration (Jenkins)
+- Orchestrates multi-stage declarative pipelines (`Jenkinsfile`) linking artifact compilation, infrastructure provisioning, container packaging, and cluster rolling updates.
+
+### 🗄️ Stage 2: Legacy Java Compilation (Tomcat Containerization)
+- Strips default server bloat from `tomcat:10-jdk17-openjdk-slim` base images and mounts corporate transaction ledgers as immutable root applications (`ROOT.war`).
+
+### 🏗️ Stage 3: Infrastructure-as-Code Provisioning (Terraform)
+- Automates backend node environment modeling, outputting clean host execution maps for downstream configuration tools.
+
+### 🛠️ Stage 4: Configuration Management (Ansible)
+- Applies idempotent kernel tuning (e.g., `net.ipv4.ip_forward`) and unboxes container runtime runtimes safely without configuration drift.
+
+### 🧠 Stage 5: Container Orchestration & Health Governance (Kubernetes)
+- Deploys a production-grade 3-replica financial workload. Implements strict `livenessProbe` and `readinessProbe` HTTP checks to prevent traffic routing during JVM warmup loops.
